@@ -106,6 +106,7 @@ class __FormWidgetState extends State<_FormWidget> {
 
     if (login == 'admin' && password == '123') {
       errorMessage = null;
+      Navigator.of(context).pushReplacementNamed('/main');
     } else {
       errorMessage = 'Неправильный логин или пароль';
     }
