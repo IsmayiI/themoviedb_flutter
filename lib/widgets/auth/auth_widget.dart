@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:themoviedb_flutter/widgets/theme/app_colors.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({super.key});
@@ -36,7 +37,7 @@ class _HeaderWidget extends StatelessWidget {
     );
 
     final linkStyle = textStyle.copyWith(
-      color: Color.fromRGBO(1, 180, 228, 1),
+      color: AppColors.lightBlue,
       decoration: TextDecoration.none,
     );
 
@@ -193,8 +194,7 @@ class __FormWidgetState extends State<_FormWidget> {
               child: Text(
                 'Reset password',
                 style: TextStyle(
-                    color: Color.fromRGBO(1, 180, 228, 1),
-                    fontWeight: FontWeight.w400),
+                    color: AppColors.lightBlue, fontWeight: FontWeight.w400),
               ),
             ),
           ],
