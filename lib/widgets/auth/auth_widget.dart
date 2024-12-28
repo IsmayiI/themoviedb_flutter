@@ -170,7 +170,7 @@ class __FormWidgetState extends State<_FormWidget> {
         TextField(
           decoration: inputDecoration,
           controller: _passwordTextController,
-          obscureText: true,
+          // obscureText: true,
         ),
         SizedBox(height: 30),
         Row(
