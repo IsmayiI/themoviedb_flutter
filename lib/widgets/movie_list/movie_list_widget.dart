@@ -2,93 +2,239 @@ import 'package:flutter/material.dart';
 import 'package:themoviedb_flutter/assets/images.dart';
 import 'package:themoviedb_flutter/widgets/theme/app_colors.dart';
 
-class MovieListWidget extends StatelessWidget {
+class Movie {
+  final String title;
+  final String description;
+  final AssetImage image;
+  final String date;
+
+  Movie({
+    required this.title,
+    required this.description,
+    required this.image,
+    required this.date,
+  });
+}
+
+class MovieListWidget extends StatefulWidget {
   const MovieListWidget({super.key});
 
   @override
+  State<MovieListWidget> createState() => _MovieListWidgetState();
+}
+
+class _MovieListWidgetState extends State<MovieListWidget> {
+  final _movies = [
+    Movie(
+      title: 'Rosemary\'s Baby',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'Red One',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'taxi',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'batman',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'it',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'it follows',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'the hills have eyes',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'avengers',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'spiderman',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'the house of 1000 doors',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+    Movie(
+      title: 'the order',
+      description:
+          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
+      image: AppImages.rosemaryImg,
+      date: 'June 12, 1968',
+    ),
+  ];
+
+  var _filteredMovies = <Movie>[];
+
+  final _searchController = TextEditingController();
+
+  void _searchMovies() {
+    final query = _searchController.text.toLowerCase().trim();
+
+    if (query.isNotEmpty) {
+      _filteredMovies = _movies
+          .where((movie) => movie.title.toLowerCase().contains(query))
+          .toList();
+    } else {
+      _filteredMovies = _movies;
+    }
+    setState(() {});
+  }
+
+  @override
+  void initState() {
+    super.initState();
+
+    _filteredMovies = _movies;
+    _searchController.addListener(_searchMovies);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      itemCount: 10,
-      itemExtent: 163,
-      itemBuilder: (BuildContext context, int index) {
-        return Column(
-          children: [
-            Expanded(
-              child: Stack(children: [
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: AppColors.lightGrey),
-                    borderRadius: BorderRadius.circular(6),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, .1),
-                        offset: Offset(0, 2),
-                        blurRadius: 8,
+    return Stack(
+      children: [
+        ListView.builder(
+          keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+          padding:
+              const EdgeInsets.only(top: 96, bottom: 20, left: 20, right: 20),
+          itemCount: _filteredMovies.length,
+          itemExtent: 163,
+          itemBuilder: (BuildContext context, int index) {
+            final movie = _filteredMovies[index];
+
+            return Column(
+              children: [
+                Expanded(
+                  child: Stack(children: [
+                    Container(
+                      clipBehavior: Clip.hardEdge,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        border: Border.all(color: AppColors.lightGrey),
+                        borderRadius: BorderRadius.circular(6),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color.fromRGBO(0, 0, 0, .1),
+                            offset: Offset(0, 2),
+                            blurRadius: 8,
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                  child: Row(
-                    children: [
-                      Image(image: AppImages.rosemaryImg),
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 24),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Column(
+                      child: Row(
+                        children: [
+                          Image(image: movie.image),
+                          Expanded(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                  horizontal: 14, vertical: 24),
+                              child: Column(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                    'Rosemary\'s Baby',
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        movie.title,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            fontWeight: FontWeight.w600),
+                                      ),
+                                      Text(
+                                        movie.date,
+                                        style: TextStyle(
+                                            fontSize: 13,
+                                            color: Color.fromRGBO(
+                                                153, 153, 153, 1)),
+                                      ),
+                                    ],
                                   ),
                                   Text(
-                                    'June 12, 1968',
-                                    style: TextStyle(
-                                        fontSize: 13,
-                                        color:
-                                            Color.fromRGBO(153, 153, 153, 1)),
+                                    movie.description,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: TextStyle(fontSize: 13),
                                   ),
                                 ],
                               ),
-                              Text(
-                                'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 13),
-                              ),
-                            ],
-                          ),
-                        ),
-                      )
-                    ],
-                  ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                    Material(
+                      color: Colors.transparent,
+                      child: InkWell(
+                        borderRadius: BorderRadius.circular(6),
+                        onTap: () {
+                          print('ok');
+                        },
+                      ),
+                    ),
+                  ]),
                 ),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(6),
-                    onTap: () {
-                      print('ok');
-                    },
-                  ),
-                ),
-              ]),
+                const SizedBox(height: 20),
+              ],
+            );
+          },
+        ),
+        Padding(
+          padding: const EdgeInsets.all(20),
+          child: TextField(
+            controller: _searchController,
+            decoration: InputDecoration(
+              labelText: 'Search',
+              filled: true,
+              fillColor: Colors.white.withAlpha(200),
+              border: OutlineInputBorder(),
             ),
-            const SizedBox(height: 20),
-          ],
-        );
-      },
+          ),
+        ),
+      ],
     );
   }
 }
