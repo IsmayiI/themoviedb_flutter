@@ -3,12 +3,14 @@ import 'package:themoviedb_flutter/assets/images.dart';
 import 'package:themoviedb_flutter/widgets/theme/app_colors.dart';
 
 class Movie {
+  final int id;
   final String title;
   final String description;
   final AssetImage image;
   final String date;
 
   Movie({
+    required this.id,
     required this.title,
     required this.description,
     required this.image,
@@ -26,6 +28,7 @@ class MovieListWidget extends StatefulWidget {
 class _MovieListWidgetState extends State<MovieListWidget> {
   final _movies = [
     Movie(
+      id: 1,
       title: 'Rosemary\'s Baby',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -33,6 +36,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 2,
       title: 'Red One',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -40,6 +44,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 3,
       title: 'taxi',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -47,6 +52,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 4,
       title: 'batman',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -54,6 +60,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 5,
       title: 'it',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -61,6 +68,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 6,
       title: 'it follows',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -68,6 +76,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 7,
       title: 'the hills have eyes',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -75,6 +84,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 1,
       title: 'avengers',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -82,6 +92,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 8,
       title: 'spiderman',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -89,6 +100,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 9,
       title: 'the house of 1000 doors',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -96,6 +108,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       date: 'June 12, 1968',
     ),
     Movie(
+      id: 10,
       title: 'the order',
       description:
           'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
@@ -119,6 +132,11 @@ class _MovieListWidgetState extends State<MovieListWidget> {
       _filteredMovies = _movies;
     }
     setState(() {});
+  }
+
+  void _onTapMovie(int index) {
+    final id = _movies[index].id;
+    Navigator.of(context).pushNamed('/main/movie_details', arguments: id);
   }
 
   @override
@@ -210,9 +228,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(6),
-                        onTap: () {
-                          print('ok');
-                        },
+                        onTap: () => _onTapMovie(index),
                       ),
                     ),
                   ]),
