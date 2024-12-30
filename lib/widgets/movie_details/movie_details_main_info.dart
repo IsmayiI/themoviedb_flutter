@@ -169,7 +169,7 @@ class _ScoreWidget extends StatelessWidget {
           child: Row(
             spacing: 6,
             children: [
-              CircularProgress(percentage: 72),
+              CircularProgress(percentage: 80),
               Text(
                 'User Score',
                 style: TextStyle(

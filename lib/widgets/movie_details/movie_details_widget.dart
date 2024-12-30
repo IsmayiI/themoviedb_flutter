@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb_flutter/widgets/movie_details/movie_details_cast_info_widget.dart';
 import 'package:themoviedb_flutter/widgets/movie_details/movie_details_main_info.dart';
 
 class MovieDetailsWidget extends StatefulWidget {
@@ -16,9 +17,11 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
       appBar: AppBar(
         title: const Text('TMDB'),
       ),
+      backgroundColor: Colors.white,
       body: ListView(
         children: [
           MovieDetailsMainInfo(),
+          MovieDetailsCastInfoWidget(),
         ],
       ),
     );
