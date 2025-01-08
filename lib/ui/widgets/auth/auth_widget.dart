@@ -1,7 +1,7 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/widgets/auth/auth_model.dart';
-import 'package:themoviedb_flutter/widgets/theme/app_colors.dart';
+import 'package:themoviedb_flutter/ui/widgets/auth/auth_model.dart';
+import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
 
 class AuthWidget extends StatefulWidget {
   const AuthWidget({super.key});

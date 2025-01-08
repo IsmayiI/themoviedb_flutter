@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb_flutter/assets/images.dart';
-import 'package:themoviedb_flutter/widgets/theme/app_colors.dart';
+import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
 
 class MovieDetailsCastInfoWidget extends StatelessWidget {
   const MovieDetailsCastInfoWidget({super.key});

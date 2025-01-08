@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb_flutter/assets/images.dart';
-import 'package:themoviedb_flutter/widgets/movie_details/circular_progress.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_details/circular_progress.dart';
 
 class MovieDetailsMainInfo extends StatelessWidget {
   const MovieDetailsMainInfo({super.key});

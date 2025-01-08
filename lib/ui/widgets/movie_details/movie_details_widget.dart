@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/widgets/movie_details/movie_details_cast_info_widget.dart';
-import 'package:themoviedb_flutter/widgets/movie_details/movie_details_main_info.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_cast_info_widget.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_main_info.dart';
 
 class MovieDetailsWidget extends StatefulWidget {
   final int movieId;
