@@ -1,5 +1,5 @@
 abstract class RouteNames {
   static const auth = 'auth';
-  static const main = 'main';
-  static const movieDetails = 'main/movie_details';
+  static const main = '/';
+  static const movieDetails = '/movie_details';
 }
