@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb_flutter/widgets/auth/auth_model.dart';
 import 'package:themoviedb_flutter/widgets/auth/auth_widget.dart';
 import 'package:themoviedb_flutter/widgets/main_screen/main_screen_widget.dart';
 import 'package:themoviedb_flutter/widgets/movie_details/movie_details_widget.dart';
@@ -29,18 +30,18 @@ class MyApp extends StatelessWidget {
         useMaterial3: true,
       ),
       routes: {
-        '/auth': (context) => AuthWidget(),
+        '/auth': (context) =>
+            AuthProvider(model: AuthModel(), child: const AuthWidget()),
         '/main': (context) => MainScreenWidget(),
-        '/main/movie_details': (context) => MovieDetailsWidget(movieId: 1),
-        //   '/main/movie_details': (context) {
-        //     final arguments = ModalRoute.of(context)?.settings.arguments;
-        //     if (arguments is int) {
-        //       return MovieDetailsWidget(movieId: arguments);
-        //     }
-        //     return const Placeholder();
-        //   },
+        '/main/movie_details': (context) {
+          final arguments = ModalRoute.of(context)?.settings.arguments;
+          if (arguments is int) {
+            return MovieDetailsWidget(movieId: 1);
+          }
+          return const Placeholder();
+        },
       },
-      initialRoute: '/main/movie_details',
+      initialRoute: '/auth',
     );
   }
 }

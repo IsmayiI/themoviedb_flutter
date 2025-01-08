@@ -1,5 +1,3 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:themoviedb_flutter/assets/images.dart';
 import 'package:themoviedb_flutter/widgets/theme/app_colors.dart';

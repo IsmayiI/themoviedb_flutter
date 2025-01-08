@@ -9,7 +9,7 @@ class MainScreenWidget extends StatefulWidget {
 }
 
 class _MainScreenWidgetState extends State<MainScreenWidget> {
-  int _selectedTab = 0;
+  int _selectedTab = 1;
 
   void onSelectTab(int index) {
     if (_selectedTab == index) return;
