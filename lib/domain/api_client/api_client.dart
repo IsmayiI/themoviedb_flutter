@@ -1,5 +1,13 @@
 import 'package:dio/dio.dart';
 
+class ApiException implements Exception {
+  final String message;
+  const ApiException(this.message);
+
+  @override
+  String toString() => message;
+}
+
 class ApiClient {
   final Dio _dio = Dio();
 
@@ -11,17 +19,26 @@ class ApiClient {
     required String username,
     required String password,
   }) async {
-    final token = await _makeToken();
-    final validatedToken = await _validateToken(username, password, token);
-    final sessionId = await _makeSession(validatedToken);
-    return sessionId;
+    try {
+      final token = await _makeToken();
+      final validatedToken = await _validateToken(username, password, token);
+      final sessionId = await _makeSession(validatedToken);
+      return sessionId;
+    } catch (e) {
+      rethrow;
+    }
   }
 
   Future<String> _makeToken() async {
-    final response =
-        await _dio.get('$_host/authentication/token/new?api_key=$_apiKey');
-    final data = response.data as Map<String, dynamic>;
-    return data['request_token'];
+    try {
+      final response =
+          await _dio.get('$_host/authentication/token/new?api_key=$_apiKey');
+      final data = response.data as Map<String, dynamic>;
+      return data['request_token'];
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
   }
 
   Future<String> _validateToken(
@@ -29,30 +46,49 @@ class ApiClient {
     String password,
     String token,
   ) async {
-    final body = <String, dynamic>{
-      'username': username,
-      'password': password,
-      'request_token': token,
-    };
+    try {
+      final body = {
+        'username': username,
+        'password': password,
+        'request_token': token,
+      };
 
-    final response = await _dio.post(
-      '$_host/authentication/token/validate_with_login?api_key=$_apiKey',
-      data: body,
-    );
-    final data = response.data as Map<String, dynamic>;
-    return data['request_token'];
+      final response = await _dio.post(
+        '$_host/authentication/token/validate_with_login?api_key=$_apiKey',
+        data: body,
+      );
+      final data = response.data as Map<String, dynamic>;
+      return data['request_token'];
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
   }
 
   Future<String> _makeSession(String token) async {
-    final body = <String, dynamic>{
-      'request_token': token,
-    };
+    try {
+      final body = {'request_token': token};
 
-    final response = await _dio.post(
-      '$_host/authentication/session/new?api_key=$_apiKey',
-      data: body,
-    );
-    final data = response.data as Map<String, dynamic>;
-    return data['session_id'];
+      final response = await _dio.post(
+        '$_host/authentication/session/new?api_key=$_apiKey',
+        data: body,
+      );
+      final data = response.data as Map<String, dynamic>;
+      return data['session_id'];
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
+  }
+
+  void _handleDioError(DioException e) {
+    if (e.response != null) {
+      throw ApiException(
+          e.response?.data['status_message'] ?? 'Unknown error occurred');
+    } else if (e.type == DioExceptionType.connectionError) {
+      throw ApiException('No internet connection. Please try again later.');
+    } else {
+      throw ApiException('An unexpected error occurred.');
+    }
   }
 }

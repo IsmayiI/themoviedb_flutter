@@ -35,7 +35,11 @@ class AuthModel extends ChangeNotifier {
     try {
       sessionId = await apiClient.auth(username: username, password: password);
     } catch (e) {
-      _errorMessage = 'Invalid username or password';
+      if (e is ApiException) {
+        _errorMessage = e.message;
+      } else {
+        _errorMessage = 'Unknown error occurred';
+      }
     }
 
     _isAuthProgress = false;

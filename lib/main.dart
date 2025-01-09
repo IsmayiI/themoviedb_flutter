@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       routes: Navigation.routes,
       onGenerateRoute: Navigation.onGenerateRoute,
-      initialRoute: Navigation.initialRoute(model.isAuth),
+      initialRoute: Navigation.initialRoute(false),
     );
   }
 }
