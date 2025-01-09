@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
 import 'package:themoviedb_flutter/ui/widgets/auth/auth_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/auth/auth_widget.dart';
@@ -11,7 +12,7 @@ abstract class Navigation {
 
   static final routes = <String, Widget Function(BuildContext)>{
     RouteNames.auth: (_) =>
-        AuthProvider(model: AuthModel(), child: const AuthWidget()),
+        NotifierProvider(model: AuthModel(), child: const AuthWidget()),
     RouteNames.main: (_) => const MainScreenWidget(),
   };
 

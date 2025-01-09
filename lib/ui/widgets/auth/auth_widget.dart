@@ -1,5 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/auth/auth_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
 
@@ -99,7 +100,7 @@ class _FormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = AuthProvider.read(context);
+    final model = NotifierProvider.read<AuthModel>(context);
 
     const textStyle = TextStyle(
       fontSize: 16,
@@ -175,7 +176,7 @@ class _LoginButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = AuthProvider.watch(context);
+    final model = NotifierProvider.watch<AuthModel>(context);
 
     final onPressed =
         model.canStartAuth == true ? () => model.auth(context) : null;
@@ -209,7 +210,8 @@ class _ErrorMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorMessage = AuthProvider.watch(context).errorMessage;
+    final errorMessage =
+        NotifierProvider.watch<AuthModel>(context).errorMessage;
     if (errorMessage == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),

@@ -55,29 +55,3 @@ class AuthModel extends ChangeNotifier {
     unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.main));
   }
 }
-
-class AuthProvider extends InheritedNotifier<AuthModel> {
-  final AuthModel model;
-
-  const AuthProvider({
-    super.key,
-    required this.model,
-    required super.child,
-  }) : super(notifier: model);
-
-  static AuthModel? maybeOf(BuildContext context) {
-    return context.dependOnInheritedWidgetOfExactType<AuthProvider>()?.model;
-  }
-
-  static AuthModel watch(BuildContext context) {
-    final AuthModel? result = maybeOf(context);
-    assert(result != null, 'No AuthProvider found in context');
-    return result!;
-  }
-
-  static AuthModel? read(BuildContext context) {
-    final element =
-        context.getElementForInheritedWidgetOfExactType<AuthProvider>();
-    return (element?.widget as AuthProvider?)?.model;
-  }
-}
