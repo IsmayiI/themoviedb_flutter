@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:themoviedb_flutter/provider/provider.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_list/movie_list_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_list/movie_list_widget.dart';
 
 class MainScreenWidget extends StatefulWidget {
@@ -10,12 +12,20 @@ class MainScreenWidget extends StatefulWidget {
 
 class _MainScreenWidgetState extends State<MainScreenWidget> {
   int _selectedTab = 1;
+  final movieListModel = MovieListModel();
 
   void onSelectTab(int index) {
     if (_selectedTab == index) return;
     setState(() {
       _selectedTab = index;
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    movieListModel.setupLocale(context);
   }
 
   @override
@@ -28,11 +38,12 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
       body: IndexedStack(
         index: _selectedTab,
         children: [
-          Text(
+          const Text(
             'Home',
           ),
-          MovieListWidget(),
-          Text(
+          NotifierProvider(
+              model: movieListModel, child: const MovieListWidget()),
+          const Text(
             'Tv Shows',
           ),
         ],

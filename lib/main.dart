@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:themoviedb_flutter/main_model.dart';
 import 'package:themoviedb_flutter/ui/navigation/navigation.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
@@ -32,6 +33,15 @@ class MyApp extends StatelessWidget {
         ),
         useMaterial3: true,
       ),
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: const [
+        Locale('ru', 'RU'),
+        Locale('en', 'US'),
+      ],
       routes: Navigation.routes,
       onGenerateRoute: Navigation.onGenerateRoute,
       initialRoute: Navigation.initialRoute(model.isAuth),

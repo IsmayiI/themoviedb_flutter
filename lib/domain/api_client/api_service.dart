@@ -3,13 +3,17 @@ import 'package:dio/dio.dart';
 class ApiService {
   final Dio _dio;
 
-  static const String _apiKey = '22d60abf9343e50aa2c5da10d9cf03b1';
+  static const _host = 'https://api.themoviedb.org/3';
+  static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
+  static const _apiKey = '22d60abf9343e50aa2c5da10d9cf03b1';
+
+  static String imageUrl(String path) => '$_imageUrl$path';
 
   ApiService()
       : _dio = Dio(
           BaseOptions(
-            baseUrl: 'https://api.themoviedb.org/3', // Базовый URL
-            queryParameters: {'api_key': _apiKey}, // Встроенный API-ключ
+            baseUrl: _host,
+            queryParameters: {'api_key': _apiKey},
           ),
         );
 

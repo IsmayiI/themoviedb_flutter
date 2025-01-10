@@ -1,165 +1,26 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/assets/images.dart';
-import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
+import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
+import 'package:themoviedb_flutter/provider/provider.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_list/movie_list_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
 
-class Movie {
-  final int id;
-  final String title;
-  final String description;
-  final AssetImage image;
-  final String date;
-
-  Movie({
-    required this.id,
-    required this.title,
-    required this.description,
-    required this.image,
-    required this.date,
-  });
-}
-
-class MovieListWidget extends StatefulWidget {
+class MovieListWidget extends StatelessWidget {
   const MovieListWidget({super.key});
 
   @override
-  State<MovieListWidget> createState() => _MovieListWidgetState();
-}
-
-class _MovieListWidgetState extends State<MovieListWidget> {
-  final _movies = [
-    Movie(
-      id: 1,
-      title: 'Rosemary\'s Baby',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 2,
-      title: 'Red One',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 3,
-      title: 'taxi',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 4,
-      title: 'batman',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 5,
-      title: 'it',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 6,
-      title: 'it follows',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 7,
-      title: 'the hills have eyes',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 1,
-      title: 'avengers',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 8,
-      title: 'spiderman',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 9,
-      title: 'the house of 1000 doors',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-    Movie(
-      id: 10,
-      title: 'the order',
-      description:
-          'A young couple, Rosemary and Guy, moves into an infamous New York apartment building, known by frightening legends and mysterious events, with the purpose of starting a family.',
-      image: AppImages.rosemaryImg,
-      date: 'June 12, 1968',
-    ),
-  ];
-
-  var _filteredMovies = <Movie>[];
-
-  final _searchController = TextEditingController();
-
-  void _searchMovies() {
-    final query = _searchController.text.toLowerCase().trim();
-
-    if (query.isNotEmpty) {
-      _filteredMovies = _movies
-          .where((movie) => movie.title.toLowerCase().contains(query))
-          .toList();
-    } else {
-      _filteredMovies = _movies;
-    }
-    setState(() {});
-  }
-
-  void _onTapMovie(int index) {
-    final id = _movies[index].id;
-    Navigator.of(context).pushNamed(RouteNames.movieDetails, arguments: id);
-  }
-
-  @override
-  void initState() {
-    super.initState();
-
-    _filteredMovies = _movies;
-    _searchController.addListener(_searchMovies);
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final model = NotifierProvider.watch<MovieListModel>(context);
+
     return Stack(
       children: [
         ListView.builder(
           keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
           padding:
               const EdgeInsets.only(top: 96, bottom: 20, left: 20, right: 20),
-          itemCount: _filteredMovies.length,
+          itemCount: model.movies.length,
           itemExtent: 163,
           itemBuilder: (BuildContext context, int index) {
-            final movie = _filteredMovies[index];
+            final movie = model.movies[index];
 
             return Column(
               children: [
@@ -181,7 +42,12 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                       ),
                       child: Row(
                         children: [
-                          Image(image: movie.image),
+                          Image.network(
+                            ApiService.imageUrl(movie.posterPath),
+                            width: 94,
+                            height: 143,
+                            fit: BoxFit.cover,
+                          ),
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -204,7 +70,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(
-                                        movie.date,
+                                        model.stringFromDate(movie.releaseDate),
                                         style: TextStyle(
                                             fontSize: 13,
                                             color: Color.fromRGBO(
@@ -213,7 +79,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                                     ],
                                   ),
                                   Text(
-                                    movie.description,
+                                    movie.overview,
                                     maxLines: 2,
                                     overflow: TextOverflow.ellipsis,
                                     style: TextStyle(fontSize: 13),
@@ -229,7 +95,7 @@ class _MovieListWidgetState extends State<MovieListWidget> {
                       color: Colors.transparent,
                       child: InkWell(
                         borderRadius: BorderRadius.circular(6),
-                        onTap: () => _onTapMovie(index),
+                        onTap: () => model.onTapMovie(context, index),
                       ),
                     ),
                   ]),
@@ -242,7 +108,6 @@ class _MovieListWidgetState extends State<MovieListWidget> {
         Padding(
           padding: const EdgeInsets.all(20),
           child: TextField(
-            controller: _searchController,
             decoration: InputDecoration(
               labelText: 'Search',
               filled: true,

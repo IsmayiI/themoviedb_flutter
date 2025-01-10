@@ -1,13 +1,10 @@
 import 'package:dio/dio.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
+import 'package:themoviedb_flutter/domain/entity/popular_movie_response.dart';
 
 class ApiClient {
   final apiService = ApiService();
-
-//   static const _host = 'https://api.themoviedb.org/3';
-//   static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
-//   static const _apiKey = '22d60abf9343e50aa2c5da10d9cf03b1';
 
   Future<String> auth({
     required String username,
@@ -68,6 +65,19 @@ class ApiClient {
       );
       final data = response.data as Map<String, dynamic>;
       return data['session_id'];
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
+  }
+
+  Future<PopularMovieResponse> getPopularMovies(
+      {int page = 1, String locale = 'en-US'}) async {
+    try {
+      final response = await apiService.get('/movie/popular',
+          queryParameters: {'page': page.toString(), 'language': locale});
+      final data = response.data as Map<String, dynamic>;
+      return PopularMovieResponse.fromJson(data);
     } on DioException catch (e) {
       _handleDioError(e);
       rethrow;
