@@ -72,7 +72,7 @@ class ApiClient {
   }
 
   Future<PopularMovieResponse> getPopularMovies(
-      {int page = 1, String locale = 'en-US'}) async {
+      {required int page, required String locale}) async {
     try {
       final response = await apiService.get('/movie/popular',
           queryParameters: {'page': page.toString(), 'language': locale});

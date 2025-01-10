@@ -11,6 +11,14 @@ class MovieListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = NotifierProvider.watch<MovieListModel>(context);
 
+    if (model.errorMessage != null) {
+      return Center(
+          child: Text(
+        model.errorMessage as String,
+        style: const TextStyle(color: Colors.red),
+      ));
+    }
+
     return Stack(
       children: [
         ListView.builder(
@@ -21,6 +29,11 @@ class MovieListWidget extends StatelessWidget {
           itemExtent: 163,
           itemBuilder: (BuildContext context, int index) {
             final movie = model.movies[index];
+            model.onScrollEnd(index);
+
+            final releaseDate = movie.releaseDate == null
+                ? ''
+                : model.stringFromDate(movie.releaseDate!);
 
             return Column(
               children: [
@@ -70,7 +83,7 @@ class MovieListWidget extends StatelessWidget {
                                             fontWeight: FontWeight.w600),
                                       ),
                                       Text(
-                                        model.stringFromDate(movie.releaseDate),
+                                        releaseDate,
                                         style: TextStyle(
                                             fontSize: 13,
                                             color: Color.fromRGBO(

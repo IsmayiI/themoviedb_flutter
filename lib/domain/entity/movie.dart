@@ -5,7 +5,7 @@ part 'movie.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake)
 class Movie {
   final bool adult;
-  final String backdropPath;
+  final String? backdropPath;
   final List<int> genreIds;
   final int id;
   final String originalLanguage;
@@ -13,7 +13,8 @@ class Movie {
   final String overview;
   final double popularity;
   final String posterPath;
-  final DateTime releaseDate;
+  @JsonKey(fromJson: _parseDate)
+  final DateTime? releaseDate;
   final String title;
   final bool video;
   final double voteAverage;
@@ -35,6 +36,11 @@ class Movie {
     required this.voteAverage,
     required this.voteCount,
   });
+
+  static DateTime? _parseDate(String? date) {
+    if (date == null || date.isEmpty) return null;
+    return DateTime.tryParse(date);
+  }
 
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 
