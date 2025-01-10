@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_client.dart';
+import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/data_providers/session_data_provider.dart';
 import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
 

@@ -1,19 +1,13 @@
 import 'package:dio/dio.dart';
-
-class ApiException implements Exception {
-  final String message;
-  const ApiException(this.message);
-
-  @override
-  String toString() => message;
-}
+import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
+import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
 
 class ApiClient {
-  final Dio _dio = Dio();
+  final apiService = ApiService();
 
-  static const _host = 'https://api.themoviedb.org/3';
-  static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
-  static const _apiKey = '22d60abf9343e50aa2c5da10d9cf03b1';
+//   static const _host = 'https://api.themoviedb.org/3';
+//   static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
+//   static const _apiKey = '22d60abf9343e50aa2c5da10d9cf03b1';
 
   Future<String> auth({
     required String username,
@@ -31,8 +25,7 @@ class ApiClient {
 
   Future<String> _makeToken() async {
     try {
-      final response =
-          await _dio.get('$_host/authentication/token/new?api_key=$_apiKey');
+      final response = await apiService.get('/authentication/token/new');
       final data = response.data as Map<String, dynamic>;
       return data['request_token'];
     } on DioException catch (e) {
@@ -53,8 +46,8 @@ class ApiClient {
         'request_token': token,
       };
 
-      final response = await _dio.post(
-        '$_host/authentication/token/validate_with_login?api_key=$_apiKey',
+      final response = await apiService.post(
+        '/authentication/token/validate_with_login',
         data: body,
       );
       final data = response.data as Map<String, dynamic>;
@@ -69,8 +62,8 @@ class ApiClient {
     try {
       final body = {'request_token': token};
 
-      final response = await _dio.post(
-        '$_host/authentication/session/new?api_key=$_apiKey',
+      final response = await apiService.post(
+        '/authentication/session/new',
         data: body,
       );
       final data = response.data as Map<String, dynamic>;
