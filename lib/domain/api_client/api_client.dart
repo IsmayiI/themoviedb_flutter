@@ -1,7 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
-import 'package:themoviedb_flutter/domain/entity/popular_movie_response.dart';
+import 'package:themoviedb_flutter/domain/entity/movie_details.dart';
+import 'package:themoviedb_flutter/domain/entity/movie_list_response.dart';
 
 class ApiClient {
   final apiService = ApiService();
@@ -71,7 +72,7 @@ class ApiClient {
     }
   }
 
-  Future<PopularMovieResponse> getPopularMovies(
+  Future<MovieListResponse> getPopularMovies(
       {required int page, required String locale}) async {
     try {
       final response = await apiService.get('/movie/popular', queryParameters: {
@@ -79,14 +80,14 @@ class ApiClient {
         'language': locale,
       });
       final data = response.data as Map<String, dynamic>;
-      return PopularMovieResponse.fromJson(data);
+      return MovieListResponse.fromJson(data);
     } on DioException catch (e) {
       _handleDioError(e);
       rethrow;
     }
   }
 
-  Future<PopularMovieResponse> searchMovie({
+  Future<MovieListResponse> searchMovie({
     required int page,
     required String locale,
     required String query,
@@ -99,7 +100,23 @@ class ApiClient {
         'include_adult': true.toString(),
       });
       final data = response.data as Map<String, dynamic>;
-      return PopularMovieResponse.fromJson(data);
+      return MovieListResponse.fromJson(data);
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
+  }
+
+  Future<MovieDetails> getMovieDetails({
+    required int id,
+    required String locale,
+  }) async {
+    try {
+      final response = await apiService.get('/movie/$id', queryParameters: {
+        'language': locale,
+      });
+      final data = response.data as Map<String, dynamic>;
+      return MovieDetails.fromJson(data);
     } on DioException catch (e) {
       _handleDioError(e);
       rethrow;

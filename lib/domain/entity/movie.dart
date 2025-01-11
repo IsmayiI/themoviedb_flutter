@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:themoviedb_flutter/utils/parse_string_to_datetime.dart';
 
 part 'movie.g.dart';
 
@@ -13,7 +14,7 @@ class Movie {
   final String overview;
   final double popularity;
   final String? posterPath;
-  @JsonKey(fromJson: _parseDate)
+  @JsonKey(fromJson: parseStringToDateTime)
   final DateTime? releaseDate;
   final String title;
   final bool video;
@@ -36,11 +37,6 @@ class Movie {
     required this.voteAverage,
     required this.voteCount,
   });
-
-  static DateTime? _parseDate(String? date) {
-    if (date == null || date.isEmpty) return null;
-    return DateTime.tryParse(date);
-  }
 
   factory Movie.fromJson(Map<String, dynamic> json) => _$MovieFromJson(json);
 

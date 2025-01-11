@@ -42,7 +42,9 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
             'Home',
           ),
           NotifierProvider(
-              model: movieListModel, child: const MovieListWidget()),
+              create: () => movieListModel,
+              isManagingModel: false,
+              child: const MovieListWidget()),
           const Text(
             'Tv Shows',
           ),

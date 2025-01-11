@@ -1,31 +1,71 @@
 import 'package:flutter/material.dart';
 
-class NotifierProvider<M extends ChangeNotifier> extends InheritedNotifier {
-  final M model;
+class NotifierProvider<M extends ChangeNotifier> extends StatefulWidget {
+  final Widget child;
+  final bool isManagingModel;
+  final M Function() create;
 
-  const NotifierProvider({
-    super.key,
-    required this.model,
-    required super.child,
-  }) : super(notifier: model);
+  const NotifierProvider(
+      {super.key,
+      required this.create,
+      required this.child,
+      this.isManagingModel = true});
+
+  @override
+  State<NotifierProvider<M>> createState() => _NotifierProviderState<M>();
 
   static M? maybeOf<M extends ChangeNotifier>(BuildContext context) {
     return context
-        .dependOnInheritedWidgetOfExactType<NotifierProvider<M>>()
+        .dependOnInheritedWidgetOfExactType<_InheritedNotifierProvider<M>>()
         ?.model;
   }
 
   static M watch<M extends ChangeNotifier>(BuildContext context) {
     final M? result = maybeOf(context);
-    assert(result != null, 'No NotifierProvider found in context');
+    assert(result != null, 'No InheritedNotifierProvider found in context');
     return result!;
   }
 
   static M? read<M extends ChangeNotifier>(BuildContext context) {
-    final element =
-        context.getElementForInheritedWidgetOfExactType<NotifierProvider<M>>();
-    return (element?.widget as NotifierProvider<M>?)?.model;
+    final element = context.getElementForInheritedWidgetOfExactType<
+        _InheritedNotifierProvider<M>>();
+    return (element?.widget as _InheritedNotifierProvider<M>?)?.model;
   }
+}
+
+class _NotifierProviderState<M extends ChangeNotifier>
+    extends State<NotifierProvider<M>> {
+  late final M _model;
+
+  @override
+  void initState() {
+    super.initState();
+    _model = widget.create();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _InheritedNotifierProvider<M>(model: _model, child: widget.child);
+  }
+
+  @override
+  void dispose() {
+    if (widget.isManagingModel) {
+      _model.dispose();
+    }
+    super.dispose();
+  }
+}
+
+class _InheritedNotifierProvider<M extends ChangeNotifier>
+    extends InheritedNotifier {
+  final M model;
+
+  const _InheritedNotifierProvider({
+    super.key,
+    required this.model,
+    required super.child,
+  }) : super(notifier: model);
 }
 
 class Provider<M> extends InheritedWidget {

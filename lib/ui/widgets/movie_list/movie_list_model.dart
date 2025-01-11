@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_client.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/entity/movie.dart';
-import 'package:themoviedb_flutter/domain/entity/popular_movie_response.dart';
+import 'package:themoviedb_flutter/domain/entity/movie_list_response.dart';
 import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
 
 class MovieListModel extends ChangeNotifier {
@@ -39,7 +39,7 @@ class MovieListModel extends ChangeNotifier {
     await _loadNextPageMovies();
   }
 
-  Future<PopularMovieResponse> _loadMovies(String locale, int nextPage) async {
+  Future<MovieListResponse> _loadMovies(String locale, int nextPage) async {
     try {
       if (_searchQuery != null) {
         return await _apiClient.searchMovie(

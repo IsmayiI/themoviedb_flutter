@@ -4,6 +4,7 @@ import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
 import 'package:themoviedb_flutter/ui/widgets/auth/auth_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/auth/auth_widget.dart';
 import 'package:themoviedb_flutter/ui/widgets/main_screen/main_screen_widget.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_widget.dart';
 
 abstract class Navigation {
@@ -12,16 +13,18 @@ abstract class Navigation {
 
   static final routes = <String, Widget Function(BuildContext)>{
     RouteNames.auth: (_) =>
-        NotifierProvider(model: AuthModel(), child: const AuthWidget()),
+        NotifierProvider(create: () => AuthModel(), child: const AuthWidget()),
     RouteNames.main: (_) => const MainScreenWidget(),
   };
 
   static Route<Object> onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouteNames.movieDetails:
-        // final movieId = settings.arguments as int;
+        final movieId = settings.arguments as int;
         return MaterialPageRoute(
-          builder: (_) => MovieDetailsWidget(movieId: 1),
+          builder: (_) => NotifierProvider(
+              create: () => MovieDetailsModel(movieId),
+              child: const MovieDetailsWidget()),
         );
 
       default:
