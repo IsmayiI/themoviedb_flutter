@@ -35,6 +35,15 @@ class MovieListWidget extends StatelessWidget {
                 ? ''
                 : model.stringFromDate(movie.releaseDate!);
 
+            final posterImg = movie.posterPath == null
+                ? const SizedBox.shrink()
+                : Image.network(
+                    ApiService.imageUrl(movie.posterPath!),
+                    width: 94,
+                    height: 143,
+                    fit: BoxFit.cover,
+                  );
+
             return Column(
               children: [
                 Expanded(
@@ -55,12 +64,7 @@ class MovieListWidget extends StatelessWidget {
                       ),
                       child: Row(
                         children: [
-                          Image.network(
-                            ApiService.imageUrl(movie.posterPath),
-                            width: 94,
-                            height: 143,
-                            fit: BoxFit.cover,
-                          ),
+                          posterImg,
                           Expanded(
                             child: Padding(
                               padding: const EdgeInsets.symmetric(
@@ -121,6 +125,7 @@ class MovieListWidget extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.all(20),
           child: TextField(
+            onChanged: (text) => model.searchMovie(text),
             decoration: InputDecoration(
               labelText: 'Search',
               filled: true,

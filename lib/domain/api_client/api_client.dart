@@ -74,8 +74,30 @@ class ApiClient {
   Future<PopularMovieResponse> getPopularMovies(
       {required int page, required String locale}) async {
     try {
-      final response = await apiService.get('/movie/popular',
-          queryParameters: {'page': page.toString(), 'language': locale});
+      final response = await apiService.get('/movie/popular', queryParameters: {
+        'page': page.toString(),
+        'language': locale,
+      });
+      final data = response.data as Map<String, dynamic>;
+      return PopularMovieResponse.fromJson(data);
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
+  }
+
+  Future<PopularMovieResponse> searchMovie({
+    required int page,
+    required String locale,
+    required String query,
+  }) async {
+    try {
+      final response = await apiService.get('/search/movie', queryParameters: {
+        'page': page.toString(),
+        'language': locale,
+        'query': query,
+        'include_adult': true.toString(),
+      });
       final data = response.data as Map<String, dynamic>;
       return PopularMovieResponse.fromJson(data);
     } on DioException catch (e) {
