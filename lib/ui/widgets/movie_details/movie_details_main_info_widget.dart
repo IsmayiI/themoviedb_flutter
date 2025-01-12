@@ -49,26 +49,28 @@ class _PosterWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final movie =
-        NotifierProvider.watch<MovieDetailsModel>(context).movieDetails;
+        NotifierProvider.read<MovieDetailsModel>(context)?.movieDetails;
 
-    final poster = movie?.posterPath == null
+    if (movie == null) return const SizedBox.shrink();
+
+    final poster = movie.posterPath == null
         ? const SizedBox.shrink()
         : Image.network(
-            ApiService.imageUrl(movie!.posterPath!),
+            ApiService.imageUrl(movie.posterPath!),
             fit: BoxFit.cover,
             height: 145,
             width: 96,
           );
-    final backdropImg = movie?.backdropPath == null
+    final backdropImg = movie.backdropPath == null
         ? const SizedBox.shrink()
         : Image.network(
-            ApiService.imageUrl(movie!.backdropPath!),
+            ApiService.imageUrl(movie.backdropPath!),
             fit: BoxFit.cover,
             height: 185,
             width: double.infinity,
           );
 
-    final backdropGradient = movie?.posterPath == null
+    final backdropGradient = movie.posterPath == null
         ? const SizedBox.shrink()
         : Container(
             height: 185,
@@ -115,9 +117,11 @@ class _MovieNameWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final movie =
-        NotifierProvider.watch<MovieDetailsModel>(context).movieDetails;
-    final title = movie?.title ?? 'Unknown title';
-    final releaseYear = movie?.releaseDate?.year.toString();
+        NotifierProvider.read<MovieDetailsModel>(context)?.movieDetails;
+
+    if (movie == null) return const SizedBox.shrink();
+    final title = movie.title;
+    final releaseYear = movie.releaseDate?.year.toString();
 
     final year = releaseYear == null ? '' : ' ($releaseYear)';
     return RichText(
@@ -181,8 +185,11 @@ class _Overview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final movie =
-        NotifierProvider.watch<MovieDetailsModel>(context).movieDetails;
-    final overview = movie?.overview;
+        NotifierProvider.read<MovieDetailsModel>(context)?.movieDetails;
+
+    if (movie == null) return const SizedBox.shrink();
+
+    final overview = movie.overview;
 
     if (overview == null) return const SizedBox.shrink();
 
@@ -210,35 +217,33 @@ class _Creators extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      spacing: 60,
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Roman Polanski',
-              style: bigTextStyle,
-            ),
-            Text(
-              'Director, Screenplay',
-            ),
-          ],
-        ),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              'Ira Levin',
-              style: bigTextStyle,
-            ),
-            Text(
-              'Novel',
-            ),
-          ],
-        ),
-      ],
+    final movie =
+        NotifierProvider.read<MovieDetailsModel>(context)?.movieCredits;
+
+    if (movie == null) return const SizedBox.shrink();
+
+    final creatorsList = movie.crew
+        .where((e) => e.job == 'Director' || e.job == 'Writer')
+        .toList()
+        .reversed;
+
+    final creators = creatorsList.map((e) {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(e.name, style: bigTextStyle),
+          Text(e.job),
+        ],
+      );
+    }).toList();
+
+    return SizedBox(
+      width: double.infinity,
+      child: Wrap(
+        spacing: 60,
+        runSpacing: 20,
+        children: creators,
+      ),
     );
   }
 }
@@ -249,9 +254,11 @@ class _ScoreWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final movie =
-        NotifierProvider.watch<MovieDetailsModel>(context).movieDetails;
+        NotifierProvider.read<MovieDetailsModel>(context)?.movieDetails;
 
-    final rating = (movie!.voteAverage * 10);
+    if (movie == null) return const SizedBox.shrink();
+
+    final rating = (movie.voteAverage * 10);
 
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

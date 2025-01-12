@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
+import 'package:themoviedb_flutter/domain/entity/credits.dart';
 import 'package:themoviedb_flutter/domain/entity/movie_details.dart';
 import 'package:themoviedb_flutter/domain/entity/movie_list_response.dart';
 
@@ -116,6 +117,23 @@ class ApiClient {
       });
       final data = response.data as Map<String, dynamic>;
       return MovieDetails.fromJson(data);
+    } on DioException catch (e) {
+      _handleDioError(e);
+      rethrow;
+    }
+  }
+
+  Future<Credits> getCredits({
+    required int id,
+    required String locale,
+  }) async {
+    try {
+      final response =
+          await apiService.get('/movie/$id/credits', queryParameters: {
+        'language': locale,
+      });
+      final data = response.data as Map<String, dynamic>;
+      return Credits.fromJson(data);
     } on DioException catch (e) {
       _handleDioError(e);
       rethrow;

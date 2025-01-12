@@ -2,11 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_client.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
+import 'package:themoviedb_flutter/domain/entity/credits.dart';
 import 'package:themoviedb_flutter/domain/entity/movie_details.dart';
 
 class MovieDetailsModel extends ChangeNotifier {
   final apiClient = ApiClient();
   MovieDetails? _movieDetails;
+  Credits? _movieCredits;
   String _locale = '';
   late DateFormat _dateFormat;
 
@@ -14,6 +16,7 @@ class MovieDetailsModel extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
 
   MovieDetails? get movieDetails => _movieDetails;
+  Credits? get movieCredits => _movieCredits;
 
   final int movieId;
   MovieDetailsModel(this.movieId);
@@ -32,6 +35,7 @@ class MovieDetailsModel extends ChangeNotifier {
     try {
       _movieDetails =
           await apiClient.getMovieDetails(id: movieId, locale: _locale);
+      _movieCredits = await apiClient.getCredits(id: movieId, locale: _locale);
     } catch (e) {
       if (e is ApiException) {
         _errorMessage = e.message;
