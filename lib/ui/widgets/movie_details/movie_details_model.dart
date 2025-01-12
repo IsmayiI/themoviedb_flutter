@@ -18,6 +18,8 @@ class MovieDetailsModel extends ChangeNotifier {
   final int movieId;
   MovieDetailsModel(this.movieId);
 
+  String stringFromDate(DateTime date) => _dateFormat.format(date);
+
   Future<void> setupLocale(BuildContext context) async {
     final locale = Localizations.localeOf(context).toLanguageTag();
     if (_locale == locale) return;

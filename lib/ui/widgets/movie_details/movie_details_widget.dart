@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_cast_info_widget.dart';
-import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_main_info.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_main_info_widget.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_model.dart';
 
 class MovieDetailsWidget extends StatefulWidget {
@@ -23,33 +23,36 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const TitleWidget(),
+        title: const Text('TMDB'),
       ),
       backgroundColor: Colors.white,
-      body: ListView(
-        children: [
-          MovieDetailsMainInfo(),
-          MovieDetailsCastInfoWidget(),
-        ],
-      ),
+      body: const _BodyWidget(),
     );
   }
 }
 
-class TitleWidget extends StatelessWidget {
-  const TitleWidget({super.key});
+class _BodyWidget extends StatelessWidget {
+  const _BodyWidget();
 
   @override
   Widget build(BuildContext context) {
-    final title =
-        NotifierProvider.watch<MovieDetailsModel>(context).movieDetails?.title;
+    final movie =
+        NotifierProvider.watch<MovieDetailsModel>(context).movieDetails;
 
-    if (title == null) {
-      return const CircularProgressIndicator(
-        color: Colors.white,
-      );
+    if (movie == null) {
+      return ColoredBox(
+          color: Color.fromRGBO(24, 23, 27, 1),
+          child: Center(
+              child: const CircularProgressIndicator(
+            color: Colors.white,
+          )));
     }
 
-    return Text(title);
+    return ListView(
+      children: [
+        const MovieDetailsMainInfoWidget(),
+        const MovieDetailsCastInfoWidget(),
+      ],
+    );
   }
 }

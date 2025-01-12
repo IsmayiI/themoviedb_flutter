@@ -97,7 +97,6 @@ class ApiClient {
         'page': page.toString(),
         'language': locale,
         'query': query,
-        'include_adult': true.toString(),
       });
       final data = response.data as Map<String, dynamic>;
       return MovieListResponse.fromJson(data);
