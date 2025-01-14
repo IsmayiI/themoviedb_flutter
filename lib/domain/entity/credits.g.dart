@@ -7,7 +7,6 @@ part of 'credits.dart';
 // **************************************************************************
 
 Credits _$CreditsFromJson(Map<String, dynamic> json) => Credits(
-      id: (json['id'] as num).toInt(),
       cast: (json['cast'] as List<dynamic>)
           .map((e) => Cast.fromJson(e as Map<String, dynamic>))
           .toList(),
@@ -17,7 +16,6 @@ Credits _$CreditsFromJson(Map<String, dynamic> json) => Credits(
     );
 
 Map<String, dynamic> _$CreditsToJson(Credits instance) => <String, dynamic>{
-      'id': instance.id,
       'cast': instance.cast.map((e) => e.toJson()).toList(),
       'crew': instance.crew.map((e) => e.toJson()).toList(),
     };

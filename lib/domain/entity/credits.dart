@@ -5,11 +5,9 @@ part 'credits.g.dart';
 @JsonSerializable(fieldRename: FieldRename.snake, explicitToJson: true)
 class Credits {
   Credits({
-    required this.id,
     required this.cast,
     required this.crew,
   });
-  final int id;
   final List<Cast> cast;
   final List<Crew> crew;
 

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/assets/images.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
 import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_model.dart';
@@ -10,8 +9,10 @@ class MovieDetailsCastInfoWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final castList =
-        NotifierProvider.watch<MovieDetailsModel>(context).movieCredits?.cast;
+    final castList = NotifierProvider.watch<MovieDetailsModel>(context)
+        .movieDetails
+        ?.credits
+        .cast;
 
     if (castList == null) return const SizedBox.shrink();
 
@@ -98,8 +99,10 @@ class _NameWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final castList =
-        NotifierProvider.watch<MovieDetailsModel>(context).movieCredits?.cast;
+    final castList = NotifierProvider.watch<MovieDetailsModel>(context)
+        .movieDetails
+        ?.credits
+        .cast;
 
     if (castList == null) return const SizedBox.shrink();
 
@@ -131,8 +134,10 @@ class _ProfileImgWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final castList =
-        NotifierProvider.watch<MovieDetailsModel>(context).movieCredits?.cast;
+    final castList = NotifierProvider.watch<MovieDetailsModel>(context)
+        .movieDetails
+        ?.credits
+        .cast;
 
     if (castList == null) return const SizedBox.shrink();
 

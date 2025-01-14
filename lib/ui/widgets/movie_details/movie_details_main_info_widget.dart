@@ -218,11 +218,11 @@ class _Creators extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final movie =
-        NotifierProvider.read<MovieDetailsModel>(context)?.movieCredits;
+        NotifierProvider.read<MovieDetailsModel>(context)?.movieDetails;
 
     if (movie == null) return const SizedBox.shrink();
 
-    final creatorsList = movie.crew
+    final creatorsList = movie.credits.crew
         .where((e) => e.job == 'Director' || e.job == 'Writer')
         .toList()
         .reversed;

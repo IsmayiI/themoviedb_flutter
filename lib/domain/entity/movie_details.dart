@@ -1,4 +1,5 @@
 import 'package:json_annotation/json_annotation.dart';
+import 'package:themoviedb_flutter/domain/entity/credits.dart';
 import 'package:themoviedb_flutter/utils/parse_string_to_datetime.dart';
 
 part 'movie_details.g.dart';
@@ -32,6 +33,7 @@ class MovieDetails {
     required this.video,
     required this.voteAverage,
     required this.voteCount,
+    required this.credits,
   });
   final bool adult;
   final String? backdropPath;
@@ -60,6 +62,7 @@ class MovieDetails {
   final bool video;
   final double voteAverage;
   final int voteCount;
+  final Credits credits;
 
   factory MovieDetails.fromJson(Map<String, dynamic> json) =>
       _$MovieDetailsFromJson(json);
