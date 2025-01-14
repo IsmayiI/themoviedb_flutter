@@ -9,7 +9,7 @@ import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_widget
 
 abstract class Navigation {
   static String initialRoute(isAuth) =>
-      isAuth ? RouteNames.main : RouteNames.auth;
+      isAuth ? RouteNames.main : RouteNames.main;
 
   static final routes = <String, Widget Function(BuildContext)>{
     RouteNames.auth: (_) =>

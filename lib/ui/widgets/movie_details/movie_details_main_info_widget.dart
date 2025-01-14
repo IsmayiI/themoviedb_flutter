@@ -84,6 +84,16 @@ class _PosterWidget extends StatelessWidget {
             ),
           );
 
+    final List<BoxShadow> boxShadowPoster = movie.backdropPath != null
+        ? [
+            const BoxShadow(
+              color: AppColors.darkGrey,
+              spreadRadius: 20,
+              blurRadius: 100,
+            ),
+          ]
+        : [];
+
     return Stack(
       children: [
         backdropGradient,
@@ -95,13 +105,7 @@ class _PosterWidget extends StatelessWidget {
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(6),
-              boxShadow: [
-                const BoxShadow(
-                  color: AppColors.darkGrey,
-                  spreadRadius: 20,
-                  blurRadius: 100,
-                ),
-              ],
+              boxShadow: boxShadowPoster,
             ),
             child: poster,
           ),
@@ -191,7 +195,7 @@ class _Overview extends StatelessWidget {
 
     final overview = movie.overview;
 
-    if (overview == null) return const SizedBox.shrink();
+    if (overview == null || overview.isEmpty) return const SizedBox.shrink();
 
     return SizedBox(
       width: double.infinity,

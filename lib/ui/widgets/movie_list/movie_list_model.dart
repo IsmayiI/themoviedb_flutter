@@ -12,6 +12,7 @@ class MovieListModel extends ChangeNotifier {
   final _apiClient = ApiClient();
   final _movies = <Movie>[];
   var _isLoadProgress = false;
+  var _listLoading = false;
   late int _currentPage;
   late int _totalPage;
   late DateFormat _dateFormat;
@@ -21,6 +22,7 @@ class MovieListModel extends ChangeNotifier {
   String? _errorMessage;
   List<Movie> get movies => List.unmodifiable(_movies);
   String? get errorMessage => _errorMessage;
+  bool get isListLoading => _listLoading;
 
   String stringFromDate(DateTime date) => _dateFormat.format(date);
 
@@ -36,6 +38,7 @@ class MovieListModel extends ChangeNotifier {
     _currentPage = 0;
     _totalPage = 1;
     _movies.clear();
+    _listLoading = true;
     notifyListeners();
     await _loadNextPageMovies();
   }
@@ -75,13 +78,14 @@ class MovieListModel extends ChangeNotifier {
         _errorMessage = 'Unknown error occurred';
       }
     }
+    _listLoading = false;
     notifyListeners();
   }
 
   Future<void> searchMovie(String text) async {
     _searchDebounce?.cancel();
     _searchDebounce = Timer(const Duration(milliseconds: 300), () async {
-      final searchQuery = text.trim().isEmpty ? null : text;
+      final searchQuery = text.trim().isEmpty ? null : text.trim();
       if (searchQuery == _searchQuery) return;
       _searchQuery = searchQuery;
       await _reloadMovies();
