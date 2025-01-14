@@ -36,6 +36,7 @@ class MovieListModel extends ChangeNotifier {
     _currentPage = 0;
     _totalPage = 1;
     _movies.clear();
+    notifyListeners();
     await _loadNextPageMovies();
   }
 
