@@ -3,6 +3,7 @@ import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
 import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/circular_progress.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_model.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_trailer/movie_trailer_widget.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
 import 'package:themoviedb_flutter/utils/format_duration.dart';
 
@@ -97,7 +98,11 @@ class _PosterWidget extends StatelessWidget {
     return Stack(
       children: [
         backdropGradient,
-        backdropImg,
+        SizedBox(
+          height: 185,
+          width: double.infinity,
+          child: MovieTrailerWidget(youTubeKey: '9vN6DHB6bJc'),
+        ),
         Positioned(
           top: 20,
           left: 20,
@@ -257,36 +262,46 @@ class _ScoreWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final movie =
-        NotifierProvider.read<MovieDetailsModel>(context)?.movieDetails;
+    final model = NotifierProvider.read<MovieDetailsModel>(context);
+
+    final movie = model?.movieDetails;
 
     if (movie == null) return const SizedBox.shrink();
 
     final rating = (movie.voteAverage * 10);
 
+    final videos = movie.videos.videos;
+
+    final trailers = videos
+        .where((video) => video.type == 'Trailer' && video.site == 'YouTube')
+        .toList();
+
+    final trailerKey = trailers.isNotEmpty ? trailers.first.key : null;
+
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        TextButton(
-          onPressed: () {},
-          child: Row(
-            spacing: 6,
-            children: [
-              CircularProgress(percentage: rating),
-              const Text(
-                'User Score',
-                style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 16,
-                    fontWeight: FontWeight.w700),
-              ),
-            ],
-          ),
+        Row(
+          spacing: 6,
+          children: [
+            CircularProgress(percentage: rating),
+            const Text(
+              'User Score',
+              style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                  fontWeight: FontWeight.w700),
+            ),
+          ],
         ),
         Container(width: 1, height: 24, color: Colors.white),
         TextButton(
-          onPressed: null,
+          onPressed: () => trailerKey != null
+              ? model?.onTapTrailer(context, trailerKey)
+              : null,
           style: TextButton.styleFrom(
+            disabledForegroundColor: Colors.grey,
+            disabledIconColor: Colors.grey,
             foregroundColor: Colors.white,
             iconColor: Colors.white,
             iconSize: 16,
@@ -297,9 +312,9 @@ class _ScoreWidget extends StatelessWidget {
               Icon(Icons.play_arrow),
               Text('Play Trailer',
                   style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.white)),
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                  )),
             ],
           ),
         ),

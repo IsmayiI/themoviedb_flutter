@@ -112,7 +112,7 @@ class ApiClient {
   }) async {
     try {
       final response = await apiService.get('/movie/$id', queryParameters: {
-        'append_to_response': 'credits',
+        'append_to_response': 'videos,credits',
         'language': locale,
       });
       final data = response.data as Map<String, dynamic>;

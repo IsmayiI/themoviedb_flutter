@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_client.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/entity/movie_details.dart';
+import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
 
 class MovieDetailsModel extends ChangeNotifier {
   final apiClient = ApiClient();
@@ -15,10 +16,15 @@ class MovieDetailsModel extends ChangeNotifier {
 
   MovieDetails? get movieDetails => _movieDetails;
 
-  final int movieId;
-  MovieDetailsModel(this.movieId);
+  final int? movieId;
+  MovieDetailsModel([this.movieId]);
 
   String stringFromDate(DateTime date) => _dateFormat.format(date);
+
+  void onTapTrailer(BuildContext context, String key) {
+    Navigator.pushNamed(context, RouteNames.movieDetailsTrailer,
+        arguments: key);
+  }
 
   Future<void> setupLocale(BuildContext context) async {
     final locale = Localizations.localeOf(context).toLanguageTag();
@@ -31,7 +37,7 @@ class MovieDetailsModel extends ChangeNotifier {
   Future<void> _loadMovieDetails() async {
     try {
       _movieDetails =
-          await apiClient.getMovieDetails(id: movieId, locale: _locale);
+          await apiClient.getMovieDetails(id: movieId!, locale: _locale);
     } catch (e) {
       if (e is ApiException) {
         _errorMessage = e.message;
