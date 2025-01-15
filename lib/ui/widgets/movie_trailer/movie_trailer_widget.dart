@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class MovieTrailerWidget extends StatefulWidget {
@@ -29,12 +30,20 @@ class _MovieTrailerWidgetState extends State<MovieTrailerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    return YoutubePlayerScaffold(
-      aspectRatio: 16 / 9,
-      controller: _controller,
-      builder: (context, player) {
-        return Center(child: player);
+    return PopScope(
+      onPopInvokedWithResult: (finality, result) async {
+        await SystemChrome.setPreferredOrientations([
+          DeviceOrientation.portraitUp,
+          DeviceOrientation.portraitDown,
+        ]);
       },
+      child: YoutubePlayerScaffold(
+        controller: _controller,
+        enableFullScreenOnVerticalDrag: false,
+        builder: (context, player) {
+          return Center(child: player);
+        },
+      ),
     );
   }
 

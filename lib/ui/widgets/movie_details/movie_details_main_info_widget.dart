@@ -367,6 +367,7 @@ class __BackDropTrailerWidgetState extends State<_BackDropTrailerWidget> {
   Widget build(BuildContext context) {
     return YoutubePlayerScaffold(
       controller: _controller,
+      enableFullScreenOnVerticalDrag: false,
       builder: (context, player) {
         return player;
       },
