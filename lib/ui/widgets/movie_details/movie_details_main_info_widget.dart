@@ -3,9 +3,9 @@ import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
 import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/circular_progress.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_model.dart';
-import 'package:themoviedb_flutter/ui/widgets/movie_trailer/movie_trailer_widget.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
 import 'package:themoviedb_flutter/utils/format_duration.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class MovieDetailsMainInfoWidget extends StatelessWidget {
   const MovieDetailsMainInfoWidget({super.key});
@@ -54,6 +54,14 @@ class _PosterWidget extends StatelessWidget {
 
     if (movie == null) return const SizedBox.shrink();
 
+    final videos = movie.videos.videos;
+
+    final trailers = videos
+        .where((video) => video.type == 'Trailer' && video.site == 'YouTube')
+        .toList();
+
+    final trailerKey = trailers.isNotEmpty ? trailers.first.key : null;
+
     final poster = movie.posterPath == null
         ? const SizedBox.shrink()
         : Image.network(
@@ -67,15 +75,12 @@ class _PosterWidget extends StatelessWidget {
         : Image.network(
             ApiService.imageUrl(movie.backdropPath!),
             fit: BoxFit.cover,
-            height: 185,
-            width: double.infinity,
           );
 
     final backdropGradient = movie.posterPath == null
         ? const SizedBox.shrink()
         : Container(
-            height: 185,
-            width: double.infinity,
+            height: 145,
             decoration: BoxDecoration(
               gradient: LinearGradient(
                 colors: [AppColors.darkBlue, AppColors.darkGrey],
@@ -95,17 +100,19 @@ class _PosterWidget extends StatelessWidget {
           ]
         : [];
 
+    final backdrop =
+        trailerKey == null ? backdropImg : _BackDropTrailerWidget(trailerKey);
+
     return Stack(
       children: [
         backdropGradient,
-        SizedBox(
-          height: 185,
-          width: double.infinity,
-          child: MovieTrailerWidget(youTubeKey: '9vN6DHB6bJc'),
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: backdrop,
         ),
         Positioned(
-          top: 20,
-          left: 20,
+          top: 43,
+          left: 30,
           child: Container(
             clipBehavior: Clip.hardEdge,
             decoration: BoxDecoration(
@@ -160,7 +167,12 @@ class _Details extends StatelessWidget {
         ? model.stringFromDate(model.movieDetails!.releaseDate!)
         : '';
 
-    final country = model.movieDetails?.originCountry.first ?? '';
+    String? country;
+    if (model.movieDetails?.originCountry.isEmpty ?? true) {
+      country = null;
+    } else {
+      country = model.movieDetails?.originCountry.first ?? '';
+    }
     final runtimeTotal = model.movieDetails?.runtime;
 
     final runtime = runtimeTotal != null && runtimeTotal > 0
@@ -170,7 +182,7 @@ class _Details extends StatelessWidget {
     final genres =
         model.movieDetails?.genres.map((e) => e.name).join(', ') ?? '';
 
-    return '$releaseDate ($country), $runtime \n $genres';
+    return '$releaseDate ${country != null ? '($country),' : ''} $runtime \n $genres';
   }
 
   @override
@@ -320,5 +332,50 @@ class _ScoreWidget extends StatelessWidget {
         ),
       ],
     );
+  }
+}
+
+class _BackDropTrailerWidget extends StatefulWidget {
+  final String youTubeKey;
+  const _BackDropTrailerWidget(this.youTubeKey);
+
+  @override
+  State<_BackDropTrailerWidget> createState() => __BackDropTrailerWidgetState();
+}
+
+class __BackDropTrailerWidgetState extends State<_BackDropTrailerWidget> {
+  late final YoutubePlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = YoutubePlayerController.fromVideoId(
+      videoId: widget.youTubeKey,
+      autoPlay: true,
+      params: const YoutubePlayerParams(
+        pointerEvents: PointerEvents.none,
+        showControls: false,
+        mute: true,
+        loop: true,
+        enableCaption: false,
+        showVideoAnnotations: false,
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return YoutubePlayerScaffold(
+      controller: _controller,
+      builder: (context, player) {
+        return player;
+      },
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.close();
+    super.dispose();
   }
 }

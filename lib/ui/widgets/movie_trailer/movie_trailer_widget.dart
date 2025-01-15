@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:youtube_player_flutter/youtube_player_flutter.dart';
+import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class MovieTrailerWidget extends StatefulWidget {
   final String youTubeKey;
@@ -11,39 +11,36 @@ class MovieTrailerWidget extends StatefulWidget {
 }
 
 class _MovieTrailerWidgetState extends State<MovieTrailerWidget> {
-  late final YoutubePlayerController _controller;
+  late YoutubePlayerController _controller;
 
   @override
   void initState() {
     super.initState();
 
-    _controller = YoutubePlayerController(
-      initialVideoId: widget.youTubeKey,
-      flags: const YoutubePlayerFlags(
-        autoPlay: true,
-        hideControls: true,
-        disableDragSeek: true,
-        controlsVisibleAtStart: false,
-        useHybridComposition: true,
+    _controller = YoutubePlayerController.fromVideoId(
+      videoId: widget.youTubeKey,
+      autoPlay: true,
+      params: const YoutubePlayerParams(
+        showFullscreenButton: true,
+        enableCaption: false,
       ),
     );
   }
 
   @override
   Widget build(BuildContext context) {
-    final player = YoutubePlayer(
+    return YoutubePlayerScaffold(
+      aspectRatio: 16 / 9,
       controller: _controller,
-      showVideoProgressIndicator: true,
+      builder: (context, player) {
+        return Center(child: player);
+      },
     );
-    return YoutubePlayerBuilder(
-        player: player,
-        builder: (context, player) {
-          return Scaffold(
-            appBar: AppBar(
-              title: const Text('Trailer'),
-            ),
-            body: Center(child: player),
-          );
-        });
+  }
+
+  @override
+  void dispose() {
+    _controller.close();
+    super.dispose();
   }
 }
