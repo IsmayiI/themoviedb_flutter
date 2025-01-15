@@ -41,7 +41,6 @@ dependencies:
   intl: any
   flutter_localizations:
     sdk: flutter
-  youtube_player_flutter: ^9.1.1
   youtube_player_iframe: ^5.2.1
 
 dev_dependencies:

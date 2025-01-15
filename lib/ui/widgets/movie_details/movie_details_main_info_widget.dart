@@ -308,8 +308,8 @@ class _ScoreWidget extends StatelessWidget {
         ),
         Container(width: 1, height: 24, color: Colors.white),
         TextButton(
-          onPressed: () => trailerKey != null
-              ? model?.onTapTrailer(context, trailerKey)
+          onPressed: trailerKey != null
+              ? () => model?.onTapTrailer(context, trailerKey)
               : null,
           style: TextButton.styleFrom(
             disabledForegroundColor: Colors.grey,
