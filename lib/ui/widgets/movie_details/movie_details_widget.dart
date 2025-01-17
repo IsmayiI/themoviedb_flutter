@@ -23,7 +23,10 @@ class _MovieDetailsWidgetState extends State<MovieDetailsWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('TMDB'),
+        title: const Image(
+          image: AssetImage('images/tmdb.png'),
+          width: 55,
+        ),
       ),
       backgroundColor: Colors.white,
       body: const _BodyWidget(),

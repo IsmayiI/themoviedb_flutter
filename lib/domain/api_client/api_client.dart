@@ -77,7 +77,7 @@ class ApiClient {
     try {
       final response = await apiService.get('/movie/popular', queryParameters: {
         'page': page.toString(),
-        'language': locale,
+        // 'language': locale,
       });
       final data = response.data as Map<String, dynamic>;
       return MovieListResponse.fromJson(data);
@@ -95,7 +95,7 @@ class ApiClient {
     try {
       final response = await apiService.get('/search/movie', queryParameters: {
         'page': page.toString(),
-        'language': locale,
+        // 'language': locale,
         'query': query,
       });
       final data = response.data as Map<String, dynamic>;
@@ -113,7 +113,7 @@ class ApiClient {
     try {
       final response = await apiService.get('/movie/$id', queryParameters: {
         'append_to_response': 'videos,credits',
-        'language': locale,
+        // 'language': locale,
       });
       final data = response.data as Map<String, dynamic>;
       return MovieDetails.fromJson(data);

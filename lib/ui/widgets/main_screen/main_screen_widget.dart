@@ -33,7 +33,10 @@ class _MainScreenWidgetState extends State<MainScreenWidget> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        title: const Text('TMDB'),
+        title: const Image(
+          image: AssetImage('images/tmdb.png'),
+          width: 55,
+        ),
       ),
       body: IndexedStack(
         index: _selectedTab,
