@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:themoviedb_flutter/main_model.dart';
 import 'package:themoviedb_flutter/ui/navigation/navigation.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  final model = MainModel();
-  await model.checkAuth();
-  final app = MyApp(model: model);
+void main() {
+  final app = MyApp();
   runApp(app);
 }
 
 class MyApp extends StatelessWidget {
-  final MainModel model;
-  const MyApp({super.key, required this.model});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +39,7 @@ class MyApp extends StatelessWidget {
       ],
       routes: Navigation.routes,
       onGenerateRoute: Navigation.onGenerateRoute,
-      initialRoute: Navigation.initialRoute(model.isAuth),
+      initialRoute: Navigation.initialRoute(),
     );
   }
 }
