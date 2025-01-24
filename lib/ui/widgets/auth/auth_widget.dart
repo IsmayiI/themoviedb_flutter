@@ -1,6 +1,6 @@
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/auth/auth_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_button_styles.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_text_styles.dart';
@@ -86,7 +86,7 @@ class _FormWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.read<AuthModel>(context);
+    final model = context.read<AuthModel>();
 
     const inputDecoration = InputDecoration(
       enabledBorder: OutlineInputBorder(
@@ -108,13 +108,13 @@ class _FormWidget extends StatelessWidget {
         const Text('Username', style: AppTextStyles.auth),
         TextField(
           decoration: inputDecoration,
-          controller: model?.usernameTextController,
+          controller: model.usernameTextController,
         ),
         const SizedBox(height: 16),
         const Text('Password', style: AppTextStyles.auth),
         TextField(
           decoration: inputDecoration,
-          controller: model?.passwordTextController,
+          controller: model.passwordTextController,
           // obscureText: true,
         ),
         const SizedBox(height: 30),
@@ -152,7 +152,7 @@ class _LoginButtonWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<AuthModel>(context);
+    final model = context.watch<AuthModel>();
 
     final onPressed =
         model.canStartAuth == true ? () => model.auth(context) : null;
@@ -185,8 +185,7 @@ class _ErrorMessageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final errorMessage =
-        NotifierProvider.watch<AuthModel>(context).errorMessage;
+    final errorMessage = context.select((AuthModel m) => m.errorMessage);
     if (errorMessage == null) return const SizedBox.shrink();
     return Padding(
       padding: const EdgeInsets.only(bottom: 16),

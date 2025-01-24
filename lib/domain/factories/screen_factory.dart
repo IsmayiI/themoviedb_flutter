@@ -17,8 +17,8 @@ class ScreenFactory {
         child: const LoaderWidget(),
       );
 
-  static Widget makeAuth() => old_provider.NotifierProvider(
-        create: () => AuthModel(),
+  static Widget makeAuth() => ChangeNotifierProvider(
+        create: (_) => AuthModel(),
         child: const AuthWidget(),
       );
 

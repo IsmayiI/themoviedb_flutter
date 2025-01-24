@@ -27,4 +27,11 @@ abstract class Navigation {
         return MaterialPageRoute(builder: (_) => const Text('404'));
     }
   }
+
+  static void resetNavigation(BuildContext context) {
+    Navigator.of(context).pushNamedAndRemoveUntil(
+      RouteNames.loader,
+      (_) => false,
+    );
+  }
 }

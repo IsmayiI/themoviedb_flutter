@@ -1,14 +1,11 @@
 import 'dart:async';
-
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/domain/api_client/api_client.dart';
 import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
-import 'package:themoviedb_flutter/domain/data_providers/session_data_provider.dart';
-import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
+import 'package:themoviedb_flutter/domain/services/auth_service.dart';
+import 'package:themoviedb_flutter/ui/navigation/navigation.dart';
 
 class AuthModel extends ChangeNotifier {
-  final apiClient = ApiClient();
-  final _sessionDataProvider = SessionDataProvider();
+  final _authService = AuthService();
 
   final usernameTextController = TextEditingController();
   final passwordTextController = TextEditingController();
@@ -19,27 +16,30 @@ class AuthModel extends ChangeNotifier {
   bool get isAuthProgress => _isAuthProgress;
   bool get canStartAuth => !_isAuthProgress;
 
+  bool _isAuthValid(String username, String password) =>
+      username.isNotEmpty && password.isNotEmpty;
+
   Future<void> auth(BuildContext context) async {
     final username = usernameTextController.text;
     final password = passwordTextController.text;
-    if (username.isEmpty || password.isEmpty) {
+
+    if (_isAuthValid(username, password)) {
+      _errorMessage = null;
+      _isAuthProgress = true;
+      notifyListeners();
+    } else {
       _errorMessage = 'Fill in your username and password';
       notifyListeners();
       return;
     }
 
-    _errorMessage = null;
-    _isAuthProgress = true;
-    notifyListeners();
-
-    String? sessionId;
     try {
-      sessionId = await apiClient.auth(username: username, password: password);
+      await _authService.auth(username, password);
     } catch (e) {
       if (e is ApiException) {
         _errorMessage = e.message;
       } else {
-        _errorMessage = 'Unknown error occurred';
+        _errorMessage = 'Unknown error, try again';
       }
     }
 
@@ -50,13 +50,7 @@ class AuthModel extends ChangeNotifier {
       return;
     }
 
-    if (sessionId == null) {
-      _errorMessage = 'Unknown error, try again';
-      notifyListeners();
-      return;
-    }
-
-    await _sessionDataProvider.setSessionId(sessionId);
-    unawaited(Navigator.of(context).pushReplacementNamed(RouteNames.main));
+    // ignore: use_build_context_synchronously
+    Navigation.resetNavigation(context);
   }
 }
