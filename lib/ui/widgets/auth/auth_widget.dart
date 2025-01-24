@@ -2,27 +2,23 @@ import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/auth/auth_model.dart';
-import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
+import 'package:themoviedb_flutter/ui/widgets/theme/app_button_styles.dart';
+import 'package:themoviedb_flutter/ui/widgets/theme/app_text_styles.dart';
 
-class AuthWidget extends StatefulWidget {
+class AuthWidget extends StatelessWidget {
   const AuthWidget({super.key});
 
-  @override
-  State<AuthWidget> createState() => _AuthWidgetState();
-}
-
-class _AuthWidgetState extends State<AuthWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 64,
         centerTitle: true,
-        title: Text('Login to your account'),
+        title: const Text('Login to your account'),
       ),
       body: ListView(
-        padding: EdgeInsets.all(20),
-        children: [
+        padding: const EdgeInsets.all(20),
+        children: const [
           _HeaderWidget(),
         ],
       ),
@@ -35,22 +31,12 @@ class _HeaderWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final textStyle = const TextStyle(
-      fontSize: 16,
-      color: Colors.black,
-    );
-
-    final linkStyle = textStyle.copyWith(
-      color: AppColors.lightBlue,
-      decoration: TextDecoration.none,
-    );
-
     return Column(
       spacing: 16,
       children: [
         RichText(
           text: TextSpan(
-            style: textStyle,
+            style: AppTextStyles.auth,
             children: [
               TextSpan(
                 text:
@@ -58,7 +44,7 @@ class _HeaderWidget extends StatelessWidget {
               ),
               TextSpan(
                 text: 'Click here ',
-                style: linkStyle,
+                style: AppTextStyles.authlink,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     // Действие на клик по ссылке
@@ -72,14 +58,14 @@ class _HeaderWidget extends StatelessWidget {
         ),
         RichText(
           text: TextSpan(
-            style: textStyle,
+            style: AppTextStyles.auth,
             children: [
               TextSpan(
                   text:
                       'If you signed up but didn\'t get your verification email, '),
               TextSpan(
                 text: 'click here ',
-                style: linkStyle,
+                style: AppTextStyles.authlink,
                 recognizer: TapGestureRecognizer()
                   ..onTap = () {
                     // Действие на клик по ссылке
@@ -102,22 +88,6 @@ class _FormWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final model = NotifierProvider.read<AuthModel>(context);
 
-    const textStyle = TextStyle(
-      fontSize: 16,
-      color: Color(0xFF212529),
-    );
-
-    const borderRadius = BorderRadius.all(Radius.circular(6));
-
-    const buttonStyle = ButtonStyle(
-      shape: WidgetStatePropertyAll(
-          RoundedRectangleBorder(borderRadius: borderRadius)),
-      minimumSize: WidgetStatePropertyAll(Size(0, 0)),
-      padding: WidgetStatePropertyAll(
-        EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-      ),
-    );
-
     const inputDecoration = InputDecoration(
       enabledBorder: OutlineInputBorder(
         borderSide:
@@ -135,13 +105,13 @@ class _FormWidget extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         const _ErrorMessageWidget(),
-        const Text('Username', style: textStyle),
+        const Text('Username', style: AppTextStyles.auth),
         TextField(
           decoration: inputDecoration,
           controller: model?.usernameTextController,
         ),
         const SizedBox(height: 16),
-        const Text('Password', style: textStyle),
+        const Text('Password', style: AppTextStyles.auth),
         TextField(
           decoration: inputDecoration,
           controller: model?.passwordTextController,
@@ -152,16 +122,8 @@ class _FormWidget extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           spacing: 20,
           children: [
-            _LoginButtonWidget(buttonStyle: buttonStyle),
-            TextButton(
-              onPressed: null,
-              style: buttonStyle,
-              child: Text(
-                'Reset password',
-                style: TextStyle(
-                    color: AppColors.lightBlue, fontWeight: FontWeight.w400),
-              ),
-            ),
+            _LoginButtonWidget(),
+            _ResetButtonWidget(),
           ],
         )
       ],
@@ -169,10 +131,24 @@ class _FormWidget extends StatelessWidget {
   }
 }
 
-class _LoginButtonWidget extends StatelessWidget {
-  final ButtonStyle buttonStyle;
+class _ResetButtonWidget extends StatelessWidget {
+  const _ResetButtonWidget();
 
-  const _LoginButtonWidget({required this.buttonStyle});
+  @override
+  Widget build(BuildContext context) {
+    return const TextButton(
+      onPressed: null,
+      style: AppButtonStyles.auth,
+      child: Text(
+        'Reset password',
+        style: AppTextStyles.reset,
+      ),
+    );
+  }
+}
+
+class _LoginButtonWidget extends StatelessWidget {
+  const _LoginButtonWidget();
 
   @override
   Widget build(BuildContext context) {
@@ -191,13 +167,12 @@ class _LoginButtonWidget extends StatelessWidget {
             ))
         : const Text(
             'Login',
-            style: TextStyle(
-                color: Color(0xFF212529), fontWeight: FontWeight.w400),
+            style: AppTextStyles.login,
           );
 
     return ElevatedButton(
       onPressed: onPressed,
-      style: buttonStyle.copyWith(
+      style: AppButtonStyles.auth.copyWith(
         backgroundColor: const WidgetStatePropertyAll(Color(0xFFdee2e6)),
       ),
       child: child,
@@ -217,7 +192,7 @@ class _ErrorMessageWidget extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 16),
       child: Text(
         errorMessage,
-        style: const TextStyle(color: Colors.red),
+        style: AppTextStyles.error,
       ),
     );
   }
