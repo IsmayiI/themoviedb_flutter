@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
 import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_list/movie_list_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
+import 'package:themoviedb_flutter/utils/image_url.dart';
 
 class MovieListWidget extends StatelessWidget {
   const MovieListWidget({super.key});
@@ -60,7 +60,7 @@ class _MovieListWidget extends StatelessWidget {
         final posterImg = movie.posterPath == null
             ? const SizedBox.shrink()
             : Image.network(
-                ApiService.imageUrl(movie.posterPath!),
+                imageUrl(movie.posterPath!),
                 width: 94,
                 height: 143,
                 fit: BoxFit.cover,

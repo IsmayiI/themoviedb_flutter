@@ -17,6 +17,8 @@ class LoaderModel {
   Future<void> checkAuth() async {
     final isAuth = await _authService.isAuth();
     final nextScreen = isAuth ? RouteNames.main : RouteNames.auth;
+
+    if (!context.mounted) return;
     Navigator.of(context).pushReplacementNamed(nextScreen);
   }
 }

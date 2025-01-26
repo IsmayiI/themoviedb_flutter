@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:themoviedb_flutter/domain/api_client/api_client.dart';
-import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
+import 'package:themoviedb_flutter/domain/api/api_clients/movie_api_client.dart';
+import 'package:themoviedb_flutter/domain/api/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/entity/movie_details.dart';
 import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
 
 class MovieDetailsModel extends ChangeNotifier {
-  final apiClient = ApiClient();
+  final apiClient = MovieApiClient();
   MovieDetails? _movieDetails;
   String _locale = '';
   late DateFormat _dateFormat;

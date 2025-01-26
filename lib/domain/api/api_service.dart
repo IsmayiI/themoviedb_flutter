@@ -1,19 +1,15 @@
 import 'package:dio/dio.dart';
+import 'package:themoviedb_flutter/domain/api/api_config.dart';
+import 'package:themoviedb_flutter/domain/api/api_exeption.dart';
 
 class ApiService {
   final Dio _dio;
 
-  static const _host = 'https://api.themoviedb.org/3';
-  static const _imageUrl = 'https://image.tmdb.org/t/p/w500';
-  static const _apiKey = '22d60abf9343e50aa2c5da10d9cf03b1';
-
-  static String imageUrl(String path) => '$_imageUrl$path';
-
   ApiService()
       : _dio = Dio(
           BaseOptions(
-            baseUrl: _host,
-            queryParameters: {'api_key': _apiKey},
+            baseUrl: ApiConfig.host,
+            queryParameters: {'api_key': ApiConfig.apiKey},
           ),
         );
 
@@ -44,6 +40,17 @@ class ApiService {
       data: data,
       options: options,
     );
+  }
+
+  void handleDioError(DioException e) {
+    if (e.response != null) {
+      throw ApiException(
+          e.response?.data['status_message'] ?? 'Unknown error occurred');
+    } else if (e.type == DioExceptionType.connectionError) {
+      throw ApiException('No internet connection. Please try again later.');
+    } else {
+      throw ApiException('An unexpected error occurred.');
+    }
   }
 
   // Метод для добавления или изменения заголовков

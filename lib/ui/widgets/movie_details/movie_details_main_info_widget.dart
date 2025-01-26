@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
 import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/circular_progress.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
 import 'package:themoviedb_flutter/utils/format_duration.dart';
+import 'package:themoviedb_flutter/utils/image_url.dart';
 import 'package:youtube_player_iframe/youtube_player_iframe.dart';
 
 class MovieDetailsMainInfoWidget extends StatelessWidget {
@@ -65,7 +65,7 @@ class _PosterWidget extends StatelessWidget {
     final poster = movie.posterPath == null
         ? const SizedBox.shrink()
         : Image.network(
-            ApiService.imageUrl(movie.posterPath!),
+            imageUrl(movie.posterPath!),
             fit: BoxFit.cover,
             height: 145,
             width: 96,
@@ -73,7 +73,7 @@ class _PosterWidget extends StatelessWidget {
     final backdropImg = movie.backdropPath == null
         ? const SizedBox.shrink()
         : Image.network(
-            ApiService.imageUrl(movie.backdropPath!),
+            imageUrl(movie.backdropPath!),
             fit: BoxFit.cover,
           );
 

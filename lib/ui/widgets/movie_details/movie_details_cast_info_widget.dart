@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/domain/api_client/api_service.dart';
 import 'package:themoviedb_flutter/provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
+import 'package:themoviedb_flutter/utils/image_url.dart';
 
 class MovieDetailsCastInfoWidget extends StatelessWidget {
   const MovieDetailsCastInfoWidget({super.key});
@@ -159,7 +159,7 @@ class _ProfileImgWidget extends StatelessWidget {
     }
 
     return Image.network(
-      ApiService.imageUrl(profilePath),
+      imageUrl(profilePath),
       width: 120,
       height: 133,
       fit: BoxFit.cover,

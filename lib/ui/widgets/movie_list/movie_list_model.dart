@@ -2,14 +2,14 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:themoviedb_flutter/domain/api_client/api_client.dart';
-import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
+import 'package:themoviedb_flutter/domain/api/api_clients/movie_api_client.dart';
+import 'package:themoviedb_flutter/domain/api/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/entity/movie.dart';
 import 'package:themoviedb_flutter/domain/entity/movie_list_response.dart';
 import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
 
 class MovieListModel extends ChangeNotifier {
-  final _apiClient = ApiClient();
+  final _apiClient = MovieApiClient();
   final _movies = <Movie>[];
   var _isLoadProgress = false;
   var _listLoading = false;

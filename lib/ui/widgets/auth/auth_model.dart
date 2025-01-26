@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/domain/api_client/api_exeption.dart';
+import 'package:themoviedb_flutter/domain/api/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/services/auth_service.dart';
 import 'package:themoviedb_flutter/ui/navigation/navigation.dart';
 
