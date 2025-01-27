@@ -1,15 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:themoviedb_flutter/provider/provider.dart';
+import 'package:provider/provider.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_list/movie_list_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/theme/app_colors.dart';
 import 'package:themoviedb_flutter/utils/image_url.dart';
 
-class MovieListWidget extends StatelessWidget {
+class MovieListWidget extends StatefulWidget {
   const MovieListWidget({super.key});
 
   @override
+  State<MovieListWidget> createState() => _MovieListWidgetState();
+}
+
+class _MovieListWidgetState extends State<MovieListWidget> {
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    context.read<MovieListModel>().setupLocale(context);
+  }
+
+  @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieListModel>(context);
+    final model = context.watch<MovieListModel>();
 
     if (model.errorMessage != null) {
       return Center(
@@ -38,7 +50,7 @@ class _MovieListWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieListModel>(context);
+    final model = context.watch<MovieListModel>();
 
     if (model.movies.isEmpty) {
       return const Center(child: Text('No movies were found for your request'));
@@ -150,7 +162,8 @@ class _SearchWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final model = NotifierProvider.watch<MovieListModel>(context);
+    final model = context.read<MovieListModel>();
+
     return Padding(
       padding: const EdgeInsets.all(20),
       child: TextField(

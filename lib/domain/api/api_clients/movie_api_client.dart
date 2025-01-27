@@ -6,8 +6,10 @@ import 'package:themoviedb_flutter/domain/entity/movie_list_response.dart';
 class MovieApiClient {
   final _apiService = ApiService();
 
-  Future<MovieListResponse> getPopularMovies(
-      {required int page, required String locale}) async {
+  Future<MovieListResponse> getPopularMovies({
+    required int page,
+    required String locale,
+  }) async {
     try {
       final response =
           await _apiService.get('/movie/popular', queryParameters: {

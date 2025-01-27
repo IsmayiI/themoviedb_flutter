@@ -8,6 +8,8 @@ import 'package:themoviedb_flutter/ui/widgets/loader/loader_widget.dart';
 import 'package:themoviedb_flutter/ui/widgets/main_screen/main_screen_widget.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_model.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_details/movie_details_widget.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_list/movie_list_model.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_list/movie_list_widget.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_trailer/movie_trailer_widget.dart';
 
 class ScreenFactory {
@@ -35,5 +37,10 @@ class ScreenFactory {
         child: MovieTrailerWidget(
           youTubeKey: youTubeKey,
         ),
+      );
+
+  static Widget makeMovieList() => ChangeNotifierProvider(
+        create: (_) => MovieListModel(),
+        child: const MovieListWidget(),
       );
 }

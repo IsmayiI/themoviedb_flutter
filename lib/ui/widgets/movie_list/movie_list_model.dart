@@ -31,16 +31,15 @@ class MovieListModel extends ChangeNotifier {
     if (_locale == locale) return;
     _locale = locale;
     _dateFormat = DateFormat.yMMMMd(locale);
-    await _reloadMovies();
+    _reloadMovies();
+    await _loadNextPageMovies();
   }
 
-  Future<void> _reloadMovies() async {
+  void _reloadMovies() {
     _currentPage = 0;
     _totalPage = 1;
     _movies.clear();
     _listLoading = true;
-    notifyListeners();
-    await _loadNextPageMovies();
   }
 
   Future<MovieListResponse> _loadMovies(String locale, int nextPage) async {
@@ -88,7 +87,9 @@ class MovieListModel extends ChangeNotifier {
       final searchQuery = text.trim().isEmpty ? null : text.trim();
       if (searchQuery == _searchQuery) return;
       _searchQuery = searchQuery;
-      await _reloadMovies();
+      _reloadMovies();
+      notifyListeners();
+      await _loadNextPageMovies();
     });
   }
 
