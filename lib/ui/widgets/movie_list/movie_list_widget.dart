@@ -62,97 +62,104 @@ class _MovieListWidget extends StatelessWidget {
       itemCount: model.movies.length,
       itemExtent: 163,
       itemBuilder: (BuildContext context, int index) {
-        final movie = model.movies[index];
-        model.onScrollEnd(index);
+        return _MovieListItemWidget(index);
+      },
+    );
+  }
+}
 
-        final releaseDate = movie.releaseDate == null
-            ? ''
-            : model.stringFromDate(movie.releaseDate!);
+class _MovieListItemWidget extends StatelessWidget {
+  final int index;
 
-        final posterImg = movie.posterPath == null
-            ? const SizedBox.shrink()
-            : Image.network(
-                imageUrl(movie.posterPath!),
-                width: 94,
-                height: 143,
-                fit: BoxFit.cover,
-              );
+  const _MovieListItemWidget(this.index);
 
-        return Column(
-          children: [
-            Expanded(
-              child: Stack(children: [
-                Container(
-                  clipBehavior: Clip.hardEdge,
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: AppColors.lightGrey),
-                    borderRadius: BorderRadius.circular(6),
-                    boxShadow: [
-                      const BoxShadow(
-                        color: Color.fromRGBO(0, 0, 0, .1),
-                        offset: Offset(0, 2),
-                        blurRadius: 8,
-                      ),
-                    ],
+  @override
+  Widget build(BuildContext context) {
+    final model = context.read<MovieListModel>();
+
+    final movie = model.movies[index];
+    model.onScrollEnd(index);
+
+    final posterImg = movie.posterPath == null
+        ? const SizedBox.shrink()
+        : Image.network(
+            imageUrl(movie.posterPath!),
+            width: 94,
+            height: 143,
+            fit: BoxFit.cover,
+          );
+
+    return Column(
+      children: [
+        Expanded(
+          child: Stack(children: [
+            Container(
+              clipBehavior: Clip.hardEdge,
+              decoration: BoxDecoration(
+                color: Colors.white,
+                border: Border.all(color: AppColors.lightGrey),
+                borderRadius: BorderRadius.circular(6),
+                boxShadow: [
+                  const BoxShadow(
+                    color: Color.fromRGBO(0, 0, 0, .1),
+                    offset: Offset(0, 2),
+                    blurRadius: 8,
                   ),
-                  child: Row(
-                    children: [
-                      posterImg,
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 14, vertical: 24),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                ],
+              ),
+              child: Row(
+                children: [
+                  posterImg,
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 24),
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    movie.title,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: const TextStyle(
-                                        fontSize: 15,
-                                        fontWeight: FontWeight.w600),
-                                  ),
-                                  Text(
-                                    releaseDate,
-                                    style: const TextStyle(
-                                        fontSize: 13,
-                                        color:
-                                            Color.fromRGBO(153, 153, 153, 1)),
-                                  ),
-                                ],
+                              Text(
+                                movie.title,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w600),
                               ),
                               Text(
-                                movie.overview,
-                                maxLines: 2,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontSize: 13),
+                                movie.releaseDate,
+                                style: const TextStyle(
+                                    fontSize: 13,
+                                    color: Color.fromRGBO(153, 153, 153, 1)),
                               ),
                             ],
                           ),
-                        ),
-                      )
-                    ],
-                  ),
-                ),
-                Material(
-                  color: Colors.transparent,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(6),
-                    onTap: () => model.onTapMovie(context, index),
-                  ),
-                ),
-              ]),
+                          Text(
+                            movie.overview,
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(fontSize: 13),
+                          ),
+                        ],
+                      ),
+                    ),
+                  )
+                ],
+              ),
             ),
-            const SizedBox(height: 20),
-          ],
-        );
-      },
+            Material(
+              color: Colors.transparent,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(6),
+                onTap: () => model.onTapMovie(context, index),
+              ),
+            ),
+          ]),
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 }

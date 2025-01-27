@@ -7,10 +7,11 @@ import 'package:themoviedb_flutter/domain/api/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/entity/movie.dart';
 import 'package:themoviedb_flutter/domain/entity/movie_list_response.dart';
 import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
+import 'package:themoviedb_flutter/ui/widgets/movie_list/movie_list_item_data.dart';
 
 class MovieListModel extends ChangeNotifier {
   final _apiClient = MovieApiClient();
-  final _movies = <Movie>[];
+  final _movies = <MovieListItemData>[];
   var _isLoadProgress = false;
   var _listLoading = false;
   late int _currentPage;
@@ -20,11 +21,9 @@ class MovieListModel extends ChangeNotifier {
   String? _searchQuery;
   Timer? _searchDebounce;
   String? _errorMessage;
-  List<Movie> get movies => List.unmodifiable(_movies);
+  List<MovieListItemData> get movies => List.unmodifiable(_movies);
   String? get errorMessage => _errorMessage;
   bool get isListLoading => _listLoading;
-
-  String stringFromDate(DateTime date) => _dateFormat.format(date);
 
   Future<void> setupLocale(BuildContext context) async {
     final locale = Localizations.localeOf(context).toLanguageTag();
@@ -64,7 +63,7 @@ class MovieListModel extends ChangeNotifier {
 
     try {
       final response = await _loadMovies(_locale, nextPage);
-      _movies.addAll(response.movies);
+      _movies.addAll(response.movies.map(_makeMovieListItemData).toList());
 
       _currentPage = response.page;
       _totalPage = response.totalPages;
@@ -101,5 +100,19 @@ class MovieListModel extends ChangeNotifier {
   void onTapMovie(BuildContext context, int index) {
     final id = _movies[index].id;
     Navigator.of(context).pushNamed(RouteNames.movieDetails, arguments: id);
+  }
+
+  MovieListItemData _makeMovieListItemData(Movie movie) {
+    final releaseDate = movie.releaseDate;
+    final releaseDateStr =
+        releaseDate == null ? '' : _dateFormat.format(releaseDate);
+
+    return MovieListItemData(
+      id: movie.id,
+      title: movie.title,
+      posterPath: movie.posterPath,
+      overview: movie.overview,
+      releaseDate: releaseDateStr,
+    );
   }
 }
