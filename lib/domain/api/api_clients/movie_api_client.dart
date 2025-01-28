@@ -7,13 +7,13 @@ class MovieApiClient {
   final _apiService = ApiService();
 
   Future<MovieListResponse> getPopularMovies({
-    required int page,
+    required String page,
     required String locale,
   }) async {
     try {
       final response =
           await _apiService.get('/movie/popular', queryParameters: {
-        'page': page.toString(),
+        'page': page,
         // 'language': locale,
       });
       final data = response.data as Map<String, dynamic>;
@@ -25,13 +25,13 @@ class MovieApiClient {
   }
 
   Future<MovieListResponse> searchMovie({
-    required int page,
+    required String page,
     required String locale,
     required String query,
   }) async {
     try {
       final response = await _apiService.get('/search/movie', queryParameters: {
-        'page': page.toString(),
+        'page': page,
         // 'language': locale,
         'query': query,
       });

@@ -2,15 +2,15 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:themoviedb_flutter/domain/api/api_clients/movie_api_client.dart';
 import 'package:themoviedb_flutter/domain/api/api_exeption.dart';
 import 'package:themoviedb_flutter/domain/entity/movie.dart';
 import 'package:themoviedb_flutter/domain/entity/movie_list_response.dart';
+import 'package:themoviedb_flutter/domain/services/movie_list_service.dart';
 import 'package:themoviedb_flutter/ui/navigation/route_names.dart';
 import 'package:themoviedb_flutter/ui/widgets/movie_list/movie_list_item_data.dart';
 
 class MovieListModel extends ChangeNotifier {
-  final _apiClient = MovieApiClient();
+  final _movieListService = MovieListService();
   final _movies = <MovieListItemData>[];
   var _isLoadProgress = false;
   var _listLoading = false;
@@ -29,7 +29,8 @@ class MovieListModel extends ChangeNotifier {
     final locale = Localizations.localeOf(context).toLanguageTag();
     if (_locale == locale) return;
     _locale = locale;
-    _dateFormat = DateFormat.yMMMMd(locale);
+    // _dateFormat = DateFormat.yMMMMd(locale);
+    _dateFormat = DateFormat.yMMMMd('en_US');
     _reloadMovies();
     await _loadNextPageMovies();
   }
@@ -44,10 +45,10 @@ class MovieListModel extends ChangeNotifier {
   Future<MovieListResponse> _loadMovies(String locale, int nextPage) async {
     try {
       if (_searchQuery != null) {
-        return await _apiClient.searchMovie(
+        return await _movieListService.searchMovie(
             locale: locale, page: nextPage, query: _searchQuery!);
       }
-      return await _apiClient.getPopularMovies(
+      return await _movieListService.getPopularMovies(
         locale: locale,
         page: nextPage,
       );
